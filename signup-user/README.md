@@ -3,8 +3,8 @@
 This sample shows how signup a new user in Firebase then add the new user to a GrowSurf referral campaign. Although Firebase is used in this example another data store or authentication API could be used. 
 
 ## Further reading
- - GrowSurf Docs: https://growsurf.com/docs
- - Firebase SDK: https://firebase.google.com/docs/auth/web/start
+ - [GrowSurf Docs](https://growsurf.com/docs)
+ - [Firebase SDK](https://firebase.google.com/docs/auth/web/start)
 
 ## Deploy and test
 
