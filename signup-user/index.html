@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="GrowSurf">
+    <link rel="icon" href="http://growsurf.com/images/favicon/favicon-32x32.3e782df6.png">
+
+    <title>GrowSurf JavaScript SDK Examples - Signup New User</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" data-integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" data-crossorigin="anonymous">
+	<link rel="stylesheet" href="signup.css">
+	
+	<!-- scripts -->
+	<script type="text/javascript" src="https://js.growsurf.com/v1"></script>
+  	<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  	<script>
+  	
+		// Initialize Firebase
+	  	var config = {
+	    	apiKey: '<FIREBASE_API_KEY>',
+	    	authDomain: '<FIREBASE_AUTH_DOMAIN>',
+	    	databaseURL: '<FIREBASE_DB_URL>',
+	    	projectId: '<FIREBASE_PROJECT_ID>',
+	    	storageBucket: '<FIREBASE_STORAGE_BUCKET>',
+	    	messagingSenderId: '<FIREBASE_MESSAGING_SENDER_ID>'
+	  	};
+	  	firebase.initializeApp(config);
+	  
+	   /**
+		* Creates a new user using the Firebase authentication
+		* API.
+		* 
+		* https://firebase.google.com/docs/auth/web/password-auth#create_a_password-based_account
+		* 
+		* @param {String} email - the users email address
+		* @param {String} password - the users password
+		* @param {Function} cb - the callback function to invoke if successful
+		*/
+		var signupUser = function(email, password, cb){
+			//signup user using firebase
+			firebase.auth().createUserWithEmailAndPassword(email, password)
+			.then(cb)
+			.catch(function(error) {
+			   //Firebase returned an error
+			   alert('Signup Failed!\n\nFirebase says ' + error.message);
+			});
+		};
+		
+	   /**
+		* Creates a new GrowSurf campaign contact using the GrowSurf
+		* JavaScript SDK.
+		* 
+		* https://growsurf.com/docs
+		* 
+		* @param {String} campaignId - the id of the campaign to add the user to
+		* @param {String} name - the name of the user
+		* @param {String} email - the users email
+		*/
+		var addUserToCampaign = function(campaignId, name, email){
+			growsurf.createContact(campaignId, email, name, {}, function(response){
+				if(response && response.meta && response.meta.code === 200){
+					var contact = response.data.contact;
+					var referralUrl = (window.location.href + '?grsf=' + contact.id);
+					alert('Thank you ' + name + '\n\n Your referral link is ' + referralUrl);
+				} else {
+					alert('Failed to add contact to GrowSurf campaign' + campaignId);
+				}
+			});
+		};
+		
+	   /**
+		* Validates the signup form. Currently only validates
+		* that values are present.
+		*
+		* @param {String} name - the name field value 
+		* @param {String} email - the email field value 
+		* @param {String} password - the password field value 
+		* @returns {Boolean} isValid - true if all form fields contain
+		*  a value
+		*/
+		var isValidSignup = function(name, email, password){
+			return ((name && name.length > 0) && (email && email.length > 0) && (password && password.length > 0));
+		};
+		
+	   /**
+		* Invoked when the signup button is pressed.
+		*
+		* @param {Event} event the javascript event object
+		*/
+		var onSubmit = function(event){
+			var name = document.getElementById('name').value;
+			var email = document.getElementById('email').value;
+			var password = document.getElementById('password').value;
+			
+			//validate the form before continuing
+			if(isValidSignup(name, email, password)){
+				
+				//signup user using Firebase Auth API
+				signupUser(email, password, function(){
+					/*
+					 * Invoke the growsurf JS SDK to create a new contact 
+					 * within our referral campaign
+					 */
+					addUserToCampaign('re1vv9', name, email);
+				});
+				
+			} else {
+				alert('Please complete the form.');
+			}
+		};
+		
+		//wait for window to load before adding event listeners
+		window.onload = function() {
+			//Add a click listener to our signup button within the form
+			document.getElementById('signupBtn').addEventListener('click', onSubmit);
+			//Add keydown listener for enter key events
+			document.getElementById('signupForm').addEventListener('keydown', function(event){
+				//check if event is from the enter/return key
+				if(event.keyCode == 13){
+					onSubmit(event);
+				}
+			});
+		};
+	
+	</script>
+	
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form id="signupForm" class="form-signup">
+        <h2 class="form-signin-heading">Sign up</h2>
+        
+        <!-- name -->
+        <label for="name" class="sr-only">Full Name</label>
+        <input id="name" name="name" type="text" class="form-control" placeholder="Full Name" required autofocus>
+        
+        <!-- email -->
+        <label for="email" class="sr-only">Email address</label>
+        <input id="email" name="email" type="email" class="form-control" placeholder="Email address" required>
+        
+        <!-- password -->
+        <label for="password" class="sr-only">Password</label>
+        <input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+        
+        <button id="signupBtn" class="btn btn-lg btn-primary btn-block" type="button">Sign up</button>
+      </form>
+
+    </div>
+  </body>
+
+</html>

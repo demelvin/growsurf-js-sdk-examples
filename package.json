@@ -1,0 +1,29 @@
+{
+  "name": "growsurf-js-sdk-examples",
+  "version": "1.0.0",
+  "description": "GrowSurf JS SDK Examples",
+  "main": "gulp",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demelvin/growsurf-js-sdk-examples.git"
+  },
+  "keywords": [
+    "GrowSurf",
+    "GrowSurf JavaScript SDK",
+    "GrowSurf JS SDK",
+    "GrowSurf Examples"
+  ],
+  "author": "Derek R. Melvin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/demelvin/growsurf-js-sdk-examples/issues"
+  },
+  "homepage": "https://github.com/demelvin/growsurf-js-sdk-examples#readme",
+  "devDependencies": {
+    "browser-sync": "^2.21.0",
+    "gulp": "^3.9.1"
+  }
+}
